@@ -18,10 +18,9 @@
   },
   "scripts": {
     "build": "tsc && tsc-alias",
-    "build:example": "tsc --project tsconfig.example.json",
     "test": "jest",
     "lint": "eslint .",
-    "prepublish": "npm run build && npm run test && npm run lint"
+    "lbt": " npm run lint && npm run build && npm run test"
   },
   "repository": {
     "type": "git",
