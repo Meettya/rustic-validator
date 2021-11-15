@@ -1,0 +1,12 @@
+{
+  "extends": "@tsconfig/node12/tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "baseUrl": "./",
+    "outDir": "dist",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}

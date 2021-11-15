@@ -1,0 +1,9 @@
+.eslintrc.js
+.github
+.pnpm-debug.log
+.vscode
+coverage
+dist
+example
+jest.config.js
+node_modules

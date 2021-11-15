@@ -1,0 +1,61 @@
+{
+  "name": "rustic-validator",
+  "version": "0.0.1",
+  "description": "Simply naive validator.",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./utils": "./dist/utils.js",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "utils": [
+        "./dist/utils.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "build:example": "tsc --project tsconfig.example.json",
+    "test": "jest",
+    "lint": "eslint .",
+    "prepublish": "npm run build && npm run test && npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meettya/rustic-validator.git"
+  },
+  "keywords": [
+    "validator"
+  ],
+  "author": "Dmitrii Karpich <meettya@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Meettya/rustic-validator/issues"
+  },
+  "homepage": "https://github.com/Meettya/rustic-validator#readme",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.9",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard-with-typescript": "^21.0.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^25.2.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1",
+    "eslint-plugin-sort-destructure-keys": "^1.4.0",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7",
+    "tsc-alias": "^1.4.0",
+    "typescript": "^4.4.4"
+  }
+}
