@@ -71,6 +71,8 @@ validate("foo", checkFn)
 validate("foo", [checkFn])
 // (unknown, [(unknown) => boolean, string]) => [boolean, string?]
 validate("foo", [checkFn, "message"])
+// (unknown, [(unknown) => boolean, number]) => [boolean, number?]
+validate("foo", [checkFn, 42])
 // (unknown, [(unknown) => boolean, (unknown) => string]) => [boolean, string?]
 validate("foo", [checkFn, messageFn])
 // any number and any kind of rules allowed
@@ -79,7 +81,7 @@ validate(
   [checkFn, messageFn], /// - execute success
   checkFn2, //           // - execute success
   [checkFn3, "message"], // - fail here
-  [checkFn4, "message2"] // - not executed
+  [checkFn4, 401] //     // - not executed
 )
 // => [false, 'message']
 
@@ -87,7 +89,7 @@ validate("Bob", [(val) => val === "Alice", (val) => `${val} not Alice`])
 // => [false, 'Bob not Alice']
 ```
 
-Process test suite for value, on **full success** return one element list `[ true ]`, on **first fail** one or two element list `[isValid: boolean, message?: string]` (depend on fail rule).
+Process test suite for value, on **full success** return one element list `[ true ]`, on **first fail** one or two element list `[isValid: boolean, message?: unknown]` (depend on fail rule).
 
 ### checkAll()
 
@@ -102,6 +104,8 @@ checkAll("foo", checkFn, checkFn2)
 checkAll("foo", [checkFn])
 // (unknown, [(unknown) => boolean, string]) => [[boolean, string?]]
 checkAll("foo", [checkFn, "message"])
+// (unknown, [(unknown) => boolean, number]) => [[boolean, number?]]
+checkAll("foo", [checkFn, 42])
 // (unknown, [(unknown) => boolean, (unknown) => string]) => [[boolean, string?]]
 checkAll("foo", [checkFn, messageFn])
 // any number and any kind of rules allowed
@@ -110,7 +114,7 @@ checkAll(
   [checkFn, messageFn], /// - execute success
   checkFn2, //           // - execute success
   [checkFn3, "message"], // - fail here
-  [checkFn4, "message2"] // - will execute
+  [checkFn4, 42] //      // - will execute
 )
 // => [[true], [true], [false, 'message'], [false, 'message2]]
 
@@ -118,7 +122,7 @@ checkAll("Bob", [(val) => val === "Alice", (val) => `${val} not Alice`])
 // => [[false, 'Bob not Alice']]
 ```
 
-Process **full** test suite for value, return **full resultset** list `[[true], [isValid: boolean, message?: string]...]`.
+Process **full** test suite for value, return **full resultset** list `[[true], [isValid: boolean, message?: unknown]...]`.
 
 ### getStatus()
 
@@ -133,6 +137,8 @@ getStatus([[false]])
 getStatus([[true], [false]])
 // ([[boolean, string]]) => boolean
 getStatus([[false, "message"]])
+// ([[boolean, number]]) => boolean
+getStatus([[false, 42]])
 // ([[boolean], [boolean, string]]) => boolean
 getStatus([[true], [false, "message"]])
 // and some bonus structure (see "idea to use")
@@ -143,7 +149,7 @@ getStatus({
 })
 // => false
 
-getStatus([[true], [true], [false, "message"], [false, "message2"]])
+getStatus([[true], [true], [false, "message"], [false, 42]])
 // => false
 ```
 
@@ -164,6 +170,8 @@ getFirstError([[false]])
 getFirstError([[true], [false]])
 // ([[boolean, string]]) => [boolean, string]
 getFirstError([[false, "message"]])
+// ([[boolean, number]]) => [boolean, number]
+getFirstError([[false, 42]])
 // ([[boolean], [boolean, string]]) => [boolean, string]
 getFirstError([[true], [false, "message"]])
 // and some bonus structure (just in case)
@@ -174,11 +182,11 @@ getFirstError({
 })
 // => [false] OR [false, "message"]
 
-getFirstError([[true], [true], [false, "message"], [false, "message2"]])
-// => [false, "message"]
+getFirstError([[true], [true], [false, 42], [false, "message"]])
+// => [false, 42]
 ```
 
-Scan some variants of results for first fail element, will return empty list `[]` if all tests succeed (no errors), or one or two-element list `[false, message?: string]` (depend on fail rule). In case of using an object with check, result **any** fail element (but **first in list**) may be returned, object keys iteration are not determined.
+Scan some variants of results for first fail element, will return empty list `[]` if all tests succeed (no errors), or one or two-element list `[false, message?: unknown]` (depend on fail rule). In case of using an object with check, result **any** fail element (but **first in list**) may be returned, object keys iteration are not determined.
 
 ## QA
 
