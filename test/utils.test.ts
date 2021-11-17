@@ -184,6 +184,16 @@ describe("getFirstError()", () => {
 
         expect(res).toStrictEqual([false, 'invalid2'])
       })
+      test("as one value with number code", () => {
+        const res = getFirstError([[false, 42]])
+
+        expect(res).toStrictEqual([false, 42])
+      })
+      test("on number values with number code", () => {
+        const res = getFirstError([[false, 42], [false, 401]])
+
+        expect(res).toStrictEqual([false, 42])
+      })
       test("on number values (first invalid, second valid)", () => {
         const res = getFirstError([[true], [false, 'invalid']])
 

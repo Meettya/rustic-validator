@@ -62,6 +62,16 @@ describe("validate()", () => {
 
       expect(res).toStrictEqual([true])
     })
+    test("as one test case with numeric code", () => {
+      const res = validate(validValue, [testFn, 42])
+
+      expect(res).toStrictEqual([true])
+    })
+    test("as number test cases with numeric code", () => {
+      const res = validate(validValue, [testFn, 42], [testFn, 401])
+
+      expect(res).toStrictEqual([true])
+    })
   })
 
   describe("should return succes for positive case with any value type", () => {
@@ -166,6 +176,16 @@ describe("validate()", () => {
 
       expect(res).toStrictEqual([false, invalidValue])
     })
+    test("as one test case with number code", () => {
+      const res = validate(invalidValue, [testFn, 42])
+
+      expect(res).toStrictEqual([false, 42])
+    })
+    test("as number test cases with number code", () => {
+      const res = validate(invalidValue, [testFn, 42], [testFn, 401])
+
+      expect(res).toStrictEqual([false, 42])
+    })
   })
   describe("should return fail for negative case and use message with any value type", () => {
     test("as number", () => {
@@ -213,6 +233,16 @@ describe("checkAll()", () => {
 
       expect(res).toStrictEqual([[true], [true]])
     })
+    test("as one test case with number code", () => {
+      const res = checkAll(validValue, [testFn, 42])
+
+      expect(res).toStrictEqual([[true]])
+    })
+    test("as number test cases with number code`", () => {
+      const res = checkAll(validValue, [testFn, 42], [testFn, 401])
+
+      expect(res).toStrictEqual([[true], [true]])
+    })
   })
 
   describe("should return fail for negative case", () => {
@@ -245,6 +275,16 @@ describe("checkAll()", () => {
       const res = checkAll(invalidValue, [testFn, invalidValue], [testFn, invalidValueTwo])
 
       expect(res).toStrictEqual([[false, invalidValue], [false, invalidValueTwo]])
+    })
+    test("as one test case with number code", () => {
+      const res = checkAll(invalidValue, [testFn, 42])
+
+      expect(res).toStrictEqual([[false, 42]])
+    })
+    test("as number test cases with number code", () => {
+      const res = checkAll(invalidValue, [testFn, 42], [testFn, 401])
+
+      expect(res).toStrictEqual([[false, 42], [false, 401]])
     })
     test("as number test cases with first string message", () => {
       const res = checkAll(invalidValue, [testFn, invalidValue], [testFn])
