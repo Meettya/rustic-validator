@@ -2,12 +2,12 @@
  * Utilites set for validator
  */
 
-type AnyResult = import('@/index').AnyResult
-type LongStringResult = import('@/index').LongStringResult
-type LongCodeResult = import('@/index').LongCodeResult
-type LongResult = import('@/index').LongResult
-type ShortResult = import('@/index').ShortResult
-type Keys = string | number
+type AnyResult = import('@/types').AnyResult
+type LongStringResult = import('@/types').LongStringResult
+type LongCodeResult = import('@/types').LongCodeResult
+type LongResult = import('@/types').LongResult
+type ShortResult = import('@/types').ShortResult
+type Keys = import('@/types').Keys
 
 const getErrorIdx = (report: AnyResult[]): number => report.findIndex(val => !val[0])
 
@@ -65,4 +65,6 @@ function getFirstError(report: AnyResult | AnyResult[] | Record<Keys, AnyResult 
   return getObjectAnyFirstError(report)
 }
 
-export { getFirstError, getStatus }
+const makeRule = <T extends any[]>(...elements: T): T => elements
+
+export { getFirstError, getStatus, makeRule }

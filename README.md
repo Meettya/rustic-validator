@@ -11,26 +11,24 @@ It`s like LEGO© for data validation. Just write some simple rules, add any mess
 ```typescript
 import { validate } from "rustic-validator"
 
-const isNonEmpty = (val: string) => val.length > 0
-const isName = (val: string) => /^\w+$/.test(val)
-const isAlice = (val: string) => val === "Alice"
+const isNonEmpty = (val: string): boolean => val.length > 0
+const isName = (val: string): boolean => /^\w+$/.test(val)
+const isAlice = (val: string): boolean => val === "Alice"
+const onlyHumanRule = [isName, "You are not human"] as const
+const onlyAliceRule = [
+  isAlice,
+  (val: string) => `You are ${val}, not Alice!`,
+] as const
 
-const res = ["", "R2-D2", "Bob", "Alice"].map((name) =>
-  validate(
-    name,
-    isNonEmpty, //                                   // - rule without message
-    [isName, "You are not human"], //                // - rule with message
-    [isAlice, (val) => `You are ${val}, not Alice!`] // - rule with message fn
-  )
+const res = validate(
+  "Bob",
+  isNonEmpty, // // - rule without message
+  onlyHumanRule, // - rule with message
+  onlyAliceRule /// - rule with message fn
 )
 
 /*
-=> [
-  [ false ],
-  [ false, 'You are not human' ],
-  [ false, 'You are Bob, not Alice!' ],
-  [ true ]
-]
+=> [ false, 'You are Bob, not Alice!' ]
 */
 ```
 
@@ -54,6 +52,53 @@ yarn add rustic-validator
 ```sh
 # using npm
 npm install rustic-validator
+```
+
+## Important about rules notations
+
+Due to the lack of JS native type Tuple, it is a little bit tricky to have simplicity at rules and type-safe checking at one time.
+
+while this in place notation works well, as TS correctly get type as Tuple `[(unknown) => boolean, string]`
+
+```typescript
+validate("foo", [checkFn, "message"])
+```
+
+this example will not work, because TS cast `rule` as Array `(string | (unknown) => boolean)[]`, not Tuple.
+
+```typescript
+const rule = [checkFn, "message"]
+validate("foo", rule) // TS complain (string | (unknown) => boolean)[] NOT [(unknown) => boolean, string]
+```
+
+As a workaround its exists some ways:
+
+- use `(string | (unknown) => boolean)[]` instead `[(unknown) => boolean, string]`, but its pointless by non-type safe at all
+
+- export all rules types and use them, but they are using generic notation like `ShortRule<T>` plus it needed to correct set to every rule
+
+- use tricky notation `[Fn, 'str'] as const` to ensure TS use Tuple type
+
+So, here used last solutions as the simplest and brief
+
+```typescript
+const rule = [checkFn, "message"] as const
+validate("foo", rule) // all works well
+
+/* type safe  */
+const wrongRule = ["message", checkFn] as const
+validate("foo", wrongRule) // will rase type error
+```
+
+Also, its may be used helper from `utils` (see below)
+
+```typescript
+import { makeRule } from "rustic-validator/utils"
+
+const isName = (val: string): boolean => /^\w+$/.test(val)
+const onlyHumanRule = makeRule(isName, "You are not human")
+
+// => onlyHumanRule type is Tuple [(val: string) => boolean, string]
 ```
 
 ## Usage
@@ -81,7 +126,7 @@ validate(
   [checkFn, messageFn], /// - execute success
   checkFn2, //           // - execute success
   [checkFn3, "message"], // - fail here
-  [checkFn4, 401] //     // - not executed
+  [checkFn4, 401] //    // - not executed
 )
 // => [false, 'message']
 
@@ -116,7 +161,7 @@ checkAll(
   [checkFn3, "message"], // - fail here
   [checkFn4, 42] //      // - will execute
 )
-// => [[true], [true], [false, 'message'], [false, 'message2]]
+// => [[true], [true], [false, 'message'], [false, 42]]
 
 checkAll("Bob", [(val) => val === "Alice", (val) => `${val} not Alice`])
 // => [[false, 'Bob not Alice']]
@@ -188,6 +233,19 @@ getFirstError([[true], [true], [false, 42], [false, "message"]])
 
 Scan some variants of results for first fail element, will return empty list `[]` if all tests succeed (no errors), or one or two-element list `[false, message?: unknown]` (depend on fail rule). In case of using an object with check, result **any** fail element (but **first in list**) may be returned, object keys iteration are not determined.
 
+### makeRule()
+
+```typescript
+import { makeRule } from "rustic-validator/utils"
+
+const isName = (val: string): boolean => /^\w+$/.test(val)
+const onlyHumanRule = makeRule(isName, "You are not human")
+
+// => onlyHumanRule type is [(val: string) => boolean, string]
+```
+
+Helper for building correct type rule, as Tuple.
+
 ## QA
 
 > Is some validation rule included? Like _isEmail_, _isPhone_ etc.
@@ -212,7 +270,7 @@ No, use it in any environment, it's the zero-dependency library.
 
 > What about a size?
 
-All library size less **18 kB** (**6 kB** Gzipped), and main function takes only **1 kB** at production bundle (and **1.3 kB** additionally for utils helpers).
+All library size less **22 kB** (**6.5 kB** Gzipped), and main function takes only **1.3 kB** at production bundle (and **1.4 kB** additionally for utils helpers).
 
 ## Idea to use
 
@@ -266,6 +324,8 @@ const { userName, userPassword, modelValidation } = storeToRefs(userAuth)
 const isFormValid = getStatus(modelValidation)
 </script>
 ```
+
+## See also
 
 ## Contributing
 
