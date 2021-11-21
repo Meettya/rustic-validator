@@ -3,6 +3,7 @@
  */
 
 import { checkAll, validate } from '../'
+import { makeRule } from '../dist/utils'
 
 const validValue = 'valid'
 const invalidValue = 'invalid'
@@ -197,6 +198,26 @@ describe("validate()", () => {
       const res = validate(invalidValue, [testFn, (val) => val])
 
       expect(res).toStrictEqual([false, invalidValue])
+    })
+  })
+  describe("should correct process rule as const", () => {
+    test("as const", () => {
+      const value = 22
+      const testFn = (val: number): boolean => val === 5
+      const templateFn = (val: number): number => val + 19
+      const rule = [testFn, templateFn] as const
+      const res = validate(value, rule)
+
+      expect(res).toStrictEqual([false, 41])
+    })
+    test("with makeRule", () => {
+      const value = 22
+      const testFn = (val: number): boolean => val === 5
+      const templateFn = (val: number): number => val + 19
+      const rule = makeRule(testFn, templateFn)
+      const res = validate(value, rule)
+
+      expect(res).toStrictEqual([false, 41])
     })
   })
 })

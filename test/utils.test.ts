@@ -2,7 +2,7 @@
  * Test suite for rustic-validator
  */
 
-import { getFirstError, getStatus } from '../dist/utils'
+import { getFirstError, getStatus, makeRule } from '../dist/utils'
 
 describe("getStatus()", () => {
   describe("should return succes for positive case", () => {
@@ -246,6 +246,24 @@ describe("getFirstError()", () => {
         expect(res).toStrictEqual([false, 'a'])
       })
       */
+    })
+  })
+
+  describe("makeRule()", () => {
+    describe("should return Tuple", () => {
+      test("on single element", () => {
+        const testFn = (val: string): boolean => val === '42'
+        const res = makeRule(testFn)
+
+        expect(res).toStrictEqual([testFn])
+      })
+      test("on two of elements", () => {
+        const testFn = (val: string): boolean => val === '42'
+        const TemplateFn = (val: string): string => `val ${val}`
+        const res = makeRule(testFn, TemplateFn)
+
+        expect(res).toStrictEqual([testFn, TemplateFn])
+      })
     })
   })
 })
