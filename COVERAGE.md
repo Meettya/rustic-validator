@@ -1,3 +1,5 @@
+# Coverage result
+
 ```sh
 ----------|---------|----------|---------|---------|-------------------
 File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
@@ -7,5 +9,5 @@ All files |     100 |      100 |     100 |     100 |
  utils.js |     100 |      100 |     100 |     100 |
 ----------|---------|----------|---------|---------|-------------------
 Test Suites: 2 passed, 2 total
-Tests:       85 passed, 85 total
+Tests:       99 passed, 99 total
 ```
