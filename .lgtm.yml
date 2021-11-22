@@ -1,0 +1,10 @@
+path_classifiers:
+  test:
+    - test
+extraction:
+  javascript:
+    index:
+      exclude:
+        - .github
+        - .vscode
+        - example

@@ -4,6 +4,7 @@
 .eslintignore
 .eslintrc.js
 .github
+.lgtm.yml
 .pnpm-debug.log
 .travis.yml
 .vscode
