@@ -1,4 +1,4 @@
-[![Test status](https://github.com/Meettya/rustic-validator/actions/workflows/tests.yml/badge.svg)](https://github.com/Meettya/rustic-validator/actions/workflows/tests.yml) &emsp; [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Meettya/rustic-validator.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Meettya/rustic-validator/context:javascript) &emsp; ![Dependenies](https://img.shields.io/badge/dependencies-ZERO-green)
+[![Test status](https://github.com/Meettya/rustic-validator/actions/workflows/tests.yml/badge.svg)](https://github.com/Meettya/rustic-validator/actions/workflows/tests.yml) &emsp; [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Meettya/rustic-validator.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Meettya/rustic-validator/context:javascript) &emsp; ![Dependenies](https://img.shields.io/badge/dependencies-ZERO-green) &emsp; ![Size](https://badgen.net/bundlephobia/minzip/rustic-validator)
 
 # Rustic validator
 
@@ -20,16 +20,10 @@ const onlyAliceRule = [
   (val: string) => `You are ${val}, not Alice!`,
 ] as const
 
-const res = validate(
-  "Bob",
-  isNonEmpty, // // - rule without message
-  onlyHumanRule, // - rule with message
-  onlyAliceRule /// - rule with message fn
-)
-
-/*
-=> [ false, 'You are Bob, not Alice!' ]
-*/
+validate("Bob", isNonEmpty, onlyHumanRule, onlyAliceRule)
+// => [ false, 'You are Bob, not Alice!' ]
+validate("Alice", isNonEmpty, onlyHumanRule, onlyAliceRule)
+// => [ true ]
 ```
 
 ## Description
@@ -68,7 +62,7 @@ this example will not work, because TS cast `rule` as Array `(string | (unknown)
 
 ```typescript
 const rule = [checkFn, "message"]
-validate("foo", rule) // TS complain (string | (unknown) => boolean)[] NOT [(unknown) => boolean, string]
+validate("foo", rule) // TS complain (string | (unknown) => boolean)[] IS NOT [(unknown) => boolean, string]
 ```
 
 As a workaround its exists some ways:
@@ -77,7 +71,7 @@ As a workaround its exists some ways:
 
 - export all rules types and use them, but they are using generic notation like `ShortRule<T>` plus it needed to correct set to every rule
 
-- use tricky notation `[Fn, 'str'] as const` to ensure TS use Tuple type
+- use tricky notation `[checkFn, "message"] as const` to ensure TS use Tuple type
 
 So, here used last solutions as the simplest and brief
 
@@ -270,7 +264,7 @@ No, use it in any environment, it's the zero-dependency library.
 
 > What about a size?
 
-All library size less **22 kB** (**6.5 kB** Gzipped), and main function takes only **1.3 kB** at production bundle (and **1.4 kB** additionally for utils helpers).
+All library size less **1 kB** Minified (**384 B** Minified + Gzipped)
 
 ## Idea to use
 
@@ -279,7 +273,7 @@ It may be interesting to try this validation with the latest [Vue](https://vuejs
 ```typescript
 // pinia store user.ts
 import { defineStore } from 'pinia'
-import { validate } from "rustic-validator"
+import { validate } from 'rustic-validator'
 
 export const useUserStore = defineStore('model/user', () => {
   const userName = ref('')
@@ -311,21 +305,25 @@ export const useUserStore = defineStore('model/user', () => {
     {{ modelValidation.userPassword[1] }}
   </p>
 
-  <button disabled="!isFormValid">Login</button>
+  <button :disabled="!isFormValid">Login</button>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { getStatus } from "rustic-validator/utils"
+import { getStatus } from 'rustic-validator/utils'
 import { useUserAuthStore } from '~/stores/model/user'
 
 const userAuth = useUserAuthStore()
 const { userName, userPassword, modelValidation } = storeToRefs(userAuth)
-const isFormValid = getStatus(modelValidation)
+const isFormValid = computed(() => getStatus(modelValidation.value))
 </script>
 ```
 
 ## See also
+
+- [v8n](https://github.com/imbrn/v8n) JavaScript fluent validation library
+- [tsfv](https://github.com/trevorr/tsfv) Typescript Fluent Validation Library
+- [v9s](https://github.com/vueent/v9s) Simple TypeScript-based validations
 
 ## Contributing
 
