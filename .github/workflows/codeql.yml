@@ -17,6 +17,22 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ "main" ]
+    paths-ignore:
+      - '**/*.md'
+
+paths:
+  - src 
+paths-ignore:
+  - '.github/**/*.*'
+  - '.vscode/**/*.*'
+  - 'example/**/*.*'
+  - '**/*.test.ts'
+  - .dcignore
+  - .eslintignore
+  - .eslintrc.js
+  - .gitignore
+  - .npmignore
+  - '**/*.md'
 
 jobs:
   analyze:
