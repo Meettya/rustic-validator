@@ -1,4 +1,4 @@
-[![Test status](https://github.com/Meettya/rustic-validator/actions/workflows/tests.yml/badge.svg)](https://github.com/Meettya/rustic-validator/actions/workflows/tests.yml) &emsp; [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Meettya/rustic-validator.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Meettya/rustic-validator/context:javascript) &emsp; ![Dependenies](https://img.shields.io/badge/dependencies-ZERO-green) &emsp; ![Size](https://badgen.net/bundlephobia/minzip/rustic-validator)
+[![Test status](https://github.com/Meettya/rustic-validator/actions/workflows/tests.yml/badge.svg)](https://github.com/Meettya/rustic-validator/actions/workflows/tests.yml) &emsp; [![CodeQL status](https://github.com/Meettya/rustic-validator/actions/workflows/codeql.yml/badge.svg)](https://github.com/Meettya/rustic-validator/actions/workflows/codeql.yml) &emsp; ![Dependenies](https://img.shields.io/badge/dependencies-ZERO-green)
 
 # Rustic validator
 
