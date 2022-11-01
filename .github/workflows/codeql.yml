@@ -20,20 +20,6 @@ on:
     paths-ignore:
       - '**/*.md'
 
-paths:
-  - src 
-paths-ignore:
-  - '.github/**/*.*'
-  - '.vscode/**/*.*'
-  - 'example/**/*.*'
-  - '**/*.test.ts'
-  - .dcignore
-  - .eslintignore
-  - .eslintrc.js
-  - .gitignore
-  - .npmignore
-  - '**/*.md'
-
 jobs:
   analyze:
     name: Analyze
