@@ -1,6 +1,6 @@
 {
   "name": "rustic-validator",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "Simply naive validator.",
   "main": "./dist/index.js",
   "exports": {
